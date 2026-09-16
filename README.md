@@ -5,12 +5,20 @@ A throwaway mobile web pilot: two people register, answer seven questions, swap 
 ## Structure
 
 - `client/` React + Vite + Tailwind single-page app
-- `besoia-backend/` Express MVC API, session identity, matching, events, and CSV export
-- `besoia-backend/src/config/` PostgreSQL connection and static pilot content
+- `besoia-backend/` the only backend; Express MVC API, session identity, matching, events, and CSV export
+- `shared/` cross-app constants and scoring contract
+
+### Backend MVC
+
+- `besoia-backend/server.js` starts the API server
+- `besoia-backend/src/app.js` configures middleware and mounts routes
+- `besoia-backend/src/config/` PostgreSQL connection, migration, schema, and static content
 - `besoia-backend/src/controllers/` request handling and persistence orchestration
 - `besoia-backend/src/routes/` API route definitions
+- `besoia-backend/src/middleware/` cookie session middleware
 - `besoia-backend/src/utils/` deterministic scoring engine
-- `shared/` cross-app constants and scoring contract
+
+There is no second `server/` backend. All backend commands run from the `besoia-backend` workspace.
 
 ## Local setup
 
