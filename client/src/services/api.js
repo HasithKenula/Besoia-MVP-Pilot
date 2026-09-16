@@ -14,3 +14,4 @@ export const fetchQuestions = () => request('/api/quiz/questions');
 export const submitAnswers = (answers) => request('/api/quiz/answers', { method: 'POST', body: JSON.stringify({ answers }) });
 export const scanMatch = (sessionId) => request('/api/matches/scan', { method: 'POST', body: JSON.stringify({ sessionId }) });
 export const fetchPendingMatch = () => request('/api/matches/pending');
+export const logQrGenerated = () => request('/api/events', { method: 'POST', body: JSON.stringify({ eventType: 'qr_generated' }) });
