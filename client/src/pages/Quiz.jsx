@@ -13,7 +13,7 @@ export default function Quiz() {
   useEffect(() => { fetchQuestions().then(setQuestions).catch((requestError) => setError(requestError.message)); }, []);
   async function handleSubmit(event) {
     event.preventDefault();
-    try { await submitAnswers(answers); setUser({ ...user, answers }); navigate('/'); }
+    try { await submitAnswers(answers); setUser({ ...user, answers }); navigate('/match'); }
     catch (requestError) { setError(requestError.message); }
   }
 

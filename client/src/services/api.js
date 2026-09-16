@@ -12,3 +12,5 @@ async function request(path, options = {}) {
 export const registerUser = (name) => request('/api/register', { method: 'POST', body: JSON.stringify({ name }) });
 export const fetchQuestions = () => request('/api/quiz/questions');
 export const submitAnswers = (answers) => request('/api/quiz/answers', { method: 'POST', body: JSON.stringify({ answers }) });
+export const scanMatch = (sessionId) => request('/api/matches/scan', { method: 'POST', body: JSON.stringify({ sessionId }) });
+export const fetchPendingMatch = () => request('/api/matches/pending');

@@ -5,6 +5,7 @@ import { pool } from './config/db.js';
 import { sessionMiddleware } from './middleware/session.js';
 import userRoutes from './routes/userRoutes.js';
 import quizRoutes from './routes/quizRoutes.js';
+import matchRoutes from './routes/matchRoutes.js';
 
 export const app = express();
 
@@ -17,6 +18,7 @@ app.use(cookieParser());
 app.use(sessionMiddleware);
 app.use('/api', userRoutes);
 app.use('/api/quiz', quizRoutes);
+app.use('/api/matches', matchRoutes);
 
 app.get('/api/health', async (_request, response) => {
   try {
