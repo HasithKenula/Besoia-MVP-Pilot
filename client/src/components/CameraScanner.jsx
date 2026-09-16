@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 
 export default function CameraScanner({ onScan, onError }) {
-  const scannerRef = useRef(null);
   const [mode, setMode] = useState('camera');
   const [fileName, setFileName] = useState('');
   const [isDragging, setIsDragging] = useState(false);
@@ -10,19 +9,38 @@ export default function CameraScanner({ onScan, onError }) {
   useEffect(() => {
     if (mode !== 'camera') return undefined;
     const scanner = new Html5Qrcode('besoia-qr-reader');
-    scannerRef.current = scanner;
+    let disposed = false;
+    let scannerStarted = false;
+
+    const stopScanner = async () => {
+      if (!scannerStarted) return;
+      scannerStarted = false;
+      try {
+        await scanner.stop();
+      } catch {}
+    };
+
     scanner.start(
       { facingMode: 'environment' },
       { fps: 10, qrbox: { width: 220, height: 220 } },
-      (decodedText) => {
-        onScan(decodedText);
-        scanner.stop().catch(() => {});
+      async (decodedText) => {
+        await stopScanner();
+        if (!disposed) onScan(decodedText);
       },
       () => {}
-    ).catch(onError);
+    ).then(() => {
+      if (disposed) {
+        scannerStarted = true;
+        stopScanner();
+      } else {
+        scannerStarted = true;
+      }
+    }).catch((error) => {
+      if (!disposed) onError(error);
+    });
     return () => {
-      scanner.stop().catch(() => {});
-      scanner.clear();
+      disposed = true;
+      stopScanner();
     };
   }, [mode, onError, onScan]);
 
@@ -32,7 +50,7 @@ export default function CameraScanner({ onScan, onError }) {
     try {
       const scanner = new Html5Qrcode('besoia-file-reader');
       const decodedText = await scanner.scanFile(file, true);
-      scanner.clear();
+      try { scanner.clear(); } catch {}
       onScan(decodedText);
     } catch {
       onError('No QR code was found in that image. Try a clear screenshot or saved QR image.');
