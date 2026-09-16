@@ -14,7 +14,7 @@ A throwaway mobile web pilot: two people register, answer seven questions, swap 
 
 ## Local setup
 
-1. Copy `server/.env.example` to `server/.env` and set `DATABASE_URL`.
+1. Copy `besoia-backend/.env.example` to `besoia-backend/.env` and set `DATABASE_URL`.
 2. Create a PostgreSQL database and run `npm run db:migrate`.
 3. Install dependencies with `npm install`.
 4. Start both apps with `npm run dev`.
