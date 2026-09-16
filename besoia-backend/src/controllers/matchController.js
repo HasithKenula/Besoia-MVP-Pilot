@@ -20,7 +20,15 @@ export async function createMatch(request, response) {
 
   const icebreaker = icebreakers[Math.floor(Math.random() * icebreakers.length)];
   const { rows } = await pool.query(
-    'INSERT INTO matches (id, session_a, session_b, score, icebreaker) VALUES ($1, $2, $3, $4, $5) RETURNING id AS "matchId", score, icebreaker',
+    `WITH created AS (
+      INSERT INTO matches (id, session_a, session_b, score, icebreaker)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING id AS "matchId", score, icebreaker, session_a, session_b
+    )
+    SELECT created."matchId", created.score, created.icebreaker,
+      json_build_object('id', friend.id, 'name', friend.name) AS friend
+    FROM created
+    JOIN sessions friend ON friend.id = created.session_a`,
     [randomUUID(), scannedSessionId, request.sessionId, score, icebreaker]
   );
   await pool.query('INSERT INTO events (session_id, event_type, metadata) VALUES ($1, $2, $3), ($4, $5, $6)', [request.sessionId, 'qr_scanned', JSON.stringify({ scannedSessionId }), scannedSessionId, 'match_created', JSON.stringify({ score })]);
@@ -28,6 +36,14 @@ export async function createMatch(request, response) {
 }
 
 export async function getPendingMatch(request, response) {
-  const { rows } = await pool.query('SELECT id AS "matchId", score, icebreaker FROM matches WHERE session_a = $1 OR session_b = $1 ORDER BY created_at DESC LIMIT 1', [request.sessionId]);
+  const { rows } = await pool.query(
+    `SELECT m.id AS "matchId", m.score, m.icebreaker,
+      json_build_object('id', friend.id, 'name', friend.name) AS friend
+     FROM matches m
+     JOIN sessions friend ON friend.id = CASE WHEN m.session_a = $1 THEN m.session_b ELSE m.session_a END
+     WHERE m.session_a = $1 OR m.session_b = $1
+     ORDER BY m.created_at DESC LIMIT 1`,
+    [request.sessionId]
+  );
   return response.json({ match: rows[0] || null });
 }
