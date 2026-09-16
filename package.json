@@ -1,0 +1,17 @@
+{
+  "name": "besoia-mvp-pilot",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace client\" \"npm run dev --workspace besoia-backend\"",
+    "build": "npm run build --workspace client",
+    "start": "npm run start --workspace besoia-backend",
+    "db:migrate": "npm run db:migrate --workspace besoia-backend"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "workspaces": [
+    "client",
+    "besoia-backend"
+  ]
+}
