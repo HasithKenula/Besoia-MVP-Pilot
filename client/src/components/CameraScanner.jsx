@@ -36,7 +36,11 @@ export default function CameraScanner({ onScan, onError }) {
         scannerStarted = true;
       }
     }).catch((error) => {
-      if (!disposed) onError(error);
+      if (!disposed) {
+        onError(error?.name === 'NotAllowedError'
+          ? 'Camera permission was denied. Choose “Upload QR image” to scan a screenshot instead.'
+          : 'Camera could not start. Choose “Upload QR image” to scan a screenshot instead.');
+      }
     });
     return () => {
       disposed = true;
