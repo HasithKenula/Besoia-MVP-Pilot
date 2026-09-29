@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color: theme('colors.ink.DEFAULT');
+    background: theme('colors.cream');
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Removes the double-tap-to-zoom delay on touch screens. */
+  a, button, [role="radio"], [role="tab"], label {
+    touch-action: manipulation;
+  }
+
+  body {
+    @apply min-w-[320px] font-sans antialiased;
+    background:
+      radial-gradient(circle at 100% 0, theme('colors.peach') 0, transparent 38%),
+      radial-gradient(circle at 0 100%, rgba(18, 55, 47, 0.06) 0, transparent 40%),
+      theme('colors.cream');
+    background-attachment: fixed;
+  }
+
+  /* Keep the app above decorative fixed layers such as the landing background. */
+  #root {
+    position: relative;
+    z-index: 1;
+  }
+
+  h1, h2, h3 {
+    @apply font-display tracking-tight;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-4 ring-accent/25;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3.5 text-[15px] font-semibold transition duration-150 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply bg-ink text-cream shadow-[0_6px_16px_-6px_rgba(18,55,47,0.55)] hover:-translate-y-px hover:bg-[#0c2923];
+  }
+  .btn-accent {
+    @apply bg-accent text-white shadow-[0_6px_16px_-6px_rgba(209,95,53,0.6)] hover:-translate-y-px hover:bg-accent-dark;
+  }
+  .btn-secondary {
+    @apply border border-ink/15 bg-white/70 text-ink hover:border-ink/30 hover:bg-white;
+  }
+  .btn-ghost {
+    @apply px-3 py-2 text-ink-soft hover:bg-ink/5 hover:text-ink;
+  }
+  .card {
+    @apply rounded-3xl border border-ink/10 bg-white/75 shadow-[0_1px_2px_rgba(18,55,47,0.04),0_12px_32px_-16px_rgba(18,55,47,0.18)] backdrop-blur-sm;
+  }
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-accent;
+  }
+  .input {
+    @apply w-full rounded-xl border border-ink/20 bg-white px-4 py-3.5 text-base text-ink placeholder:text-ink/40 transition focus:border-accent focus:outline-none focus:ring-4 focus:ring-accent/15;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}

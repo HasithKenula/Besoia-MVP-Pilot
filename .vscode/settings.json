@@ -1,0 +1,10 @@
+{
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "css.lint.unknownAtRules": "ignore",
+  "tailwindCSS.experimental.configFile": "frontend/tailwind.config.js",
+  "editor.quickSuggestions": {
+    "strings": "on"
+  }
+}

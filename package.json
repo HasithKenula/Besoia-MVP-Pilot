@@ -2,16 +2,17 @@
   "name": "besoia-mvp-pilot",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev --workspace client\" \"npm run dev --workspace besoia-backend\"",
-    "build": "npm run build --workspace client",
-    "start": "npm run start --workspace besoia-backend",
-    "db:migrate": "npm run db:migrate --workspace besoia-backend"
+    "dev": "concurrently \"npm run dev --workspace frontend\" \"npm run dev --workspace backend\"",
+    "dev:mobile": "concurrently \"npm run dev:mobile --workspace frontend\" \"npm run dev --workspace backend\"",
+    "build": "npm run build --workspace frontend",
+    "start": "npm run start --workspace backend",
+    "db:migrate": "npm run db:migrate --workspace backend"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"
   },
   "workspaces": [
-    "client",
-    "besoia-backend"
+    "frontend",
+    "backend"
   ]
 }
